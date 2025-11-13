@@ -1,0 +1,32 @@
+$submate-type-scale: (
+  1: 2.5,
+  2: 2,
+  3: 1.75,
+  4: 1.5,
+  5: 1.25,
+  6: 1,
+  7: .875
+);
+
+// 若需要可改這裡的斷點
+$submate-breakpoints: (
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px
+) !default;
+
+@function smt-size($mult) { @return $font-size-base * $mult; }
+
+@each $bp, $min in $submate-breakpoints {
+  @media (min-width: $min) {
+    // h?-{bp} 與 fs-{bp}-?
+    @each $k, $mult in $submate-type-scale {
+      .h#{$k}-#{$bp}  { font-size: smt-size($mult) !important; } // !important會影響權重，要小心使用，因為要蓋過bootstrap預設必需
+      .fs-#{$bp}-#{$k}{ font-size: smt-size($mult) !important; } // !important會影響權重，要小心使用，因為要蓋過bootstrap預設必需
+    }
+    // small-{bp}
+    .small-#{$bp} { font-size: smt-size(.875) !important; } // !important會影響權重，要小心使用，因為要蓋過bootstrap預設必需
+  }
+}
