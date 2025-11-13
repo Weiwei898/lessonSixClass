@@ -4,7 +4,7 @@ const searchBox = document.querySelector('.searchBox');//宣告DOM篩選區域
 const cardCityNumEl = document.querySelector('.cardCityNum');//宣告DOM卡片數量
 const addBtn = document.querySelector('#addTicketBtn');
 const addForm = document.querySelector('.addTicketForm');
-const productsUrl ="https://raw.githubusercontent.com/hexschool/js-training/main/travelAPI-lv1.json";
+const productsUrl ="./data/travelAPI-lv1.json";
 let data = []; //放入API資料用空陣列
 
 // 篩選地區，並累加數字上去
