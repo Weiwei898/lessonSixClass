@@ -2,6 +2,7 @@ const ticketList = document.querySelector('.ticketList');
 //篩選區域監聽事件
 const searchBox = document.querySelector('.searchBox');//宣告DOM篩選區域
 const cardCityNumEl = document.querySelector('.cardCityNum');//宣告DOM卡片數量
+const cantFindAreaEl = document.querySelector('#cantFindArea');//宣告DOM篩選不到渲染的內容
 const addBtn = document.querySelector('#addTicketBtn');
 const addForm = document.querySelector('.addTicketForm');
 const productsUrl ="https://raw.githubusercontent.com/hexschool/js-training/main/travelAPI-lv1.json";
@@ -107,6 +108,11 @@ function createTicketElement(item) {
 function renderTicketList(filteredData) {
   if (!ticketList) return; // 確保 ticketList 存在
     ticketList.innerHTML = ''; // 清空現有列表
+    // 如果沒有資料，直接清空並退出渲染
+    if (filteredData.length === 0) {
+        updateCardCount(0);
+        return; 
+    }
     filteredData.forEach(item => {
         const li = createTicketElement(item);
         ticketList.appendChild(li);
@@ -126,11 +132,26 @@ function updateCardCount(count) {
 function filterAndRender(selectedCity) {
     // 1. 篩選資料
     const filteredData = data.filter(item => {
-        return selectedCity === 'allCity' || item.area === selectedCity;
+      const filterKey = selectedCity === '地區搜尋' ? 'allCity' : selectedCity;
+      return filterKey === 'allCity' || item.area === filterKey;
     });
 
     // 2. 渲染篩選後的資料
     renderTicketList(filteredData);
+
+    // 3. **新增：控制「查無資料」區域的顯示**
+    if (cantFindAreaEl) {
+        if (filteredData.length === 0) {
+            // 如果沒有資料：隱藏卡片列表，顯示查無資料區
+            ticketList.style.display = 'none';
+            cantFindAreaEl.style.display = 'block';
+            updateCardCount(0); // 確保筆數顯示為 0
+        } else {
+            // 如果有資料：顯示卡片列表，隱藏查無資料區
+            ticketList.style.display = 'flex';
+            cantFindAreaEl.style.display = 'none';
+        }
+      }
 }
 
 //新增套票
